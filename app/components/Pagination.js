@@ -8,7 +8,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
          <button
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`flex items-center px-4 py-2 border rounded-l-md ${currentPage === 1 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-700'}`}
+            className={`flex items-center px-4 py-2 border rounded-l-md ${currentPage === 1 ? 'bg-gray-300 text-gray-400 cursor-not-allowed' : 'bg-gray-600 text-white hover:bg-gray-700'}`}
          >
             <FaChevronLeft className="mr-2" />
             Previous
@@ -18,7 +18,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
             <button
                key={page}
                onClick={() => onPageChange(page)}
-               className={`px-4 py-2 border ${page === currentPage ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 hover:bg-blue-200'}`}
+               className={`px-4 py-2 border ${page === currentPage ? 'bg-gray-700 text-white' : 'bg-white text-gray-700 hover:bg-gray-300'}`}
             >
                {page}
             </button>
@@ -27,7 +27,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
          <button
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`flex items-center px-4 py-2 border rounded-r-md ${currentPage === totalPages ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-700'}`}
+            className={`flex items-center px-4 py-2 border rounded-r-md ${currentPage === totalPages ? 'bg-gray-300 text-gray-400 cursor-not-allowed' : 'bg-gray-600 text-white hover:bg-gray-700'}`}
          >
             Next
             <FaChevronRight className="ml-2" />
