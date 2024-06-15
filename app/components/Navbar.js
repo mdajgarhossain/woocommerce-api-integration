@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 
-export default function Navbar({ cartItems }) {
+export default function Navbar({ cartItems = [] }) {
    return (
       <nav className="bg-gray-800 p-4 flex justify-between items-center">
          <div>
