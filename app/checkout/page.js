@@ -30,7 +30,12 @@ export default function Checkout() {
 
   const router = useRouter();
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -58,7 +63,7 @@ export default function Checkout() {
 
   const onSubmit = async (data) => {
     setIsPlacingOrder(true);
-    
+
     try {
       const orderData = {
         payment_method: "bacs",
@@ -92,7 +97,7 @@ export default function Checkout() {
       };
 
       // const response = await api.post("orders", orderData);
-      const response = await axios.post('/api/orders', orderData);
+      const response = await axios.post("/api/orders", orderData);
 
       localStorage.setItem("orderDetails", JSON.stringify(response.data));
       toast.success("Order placed successfully! Redirecting...", {
@@ -129,7 +134,11 @@ export default function Checkout() {
                   placeholder="Full Name"
                   className="w-full p-2 border rounded"
                 />
-                {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName.message}</p>}
+                {errors.fullName && (
+                  <p className="text-red-500 text-sm">
+                    {errors.fullName.message}
+                  </p>
+                )}
                 <input
                   type="text"
                   name="address"
@@ -137,7 +146,11 @@ export default function Checkout() {
                   placeholder="Address"
                   className="w-full p-2 border rounded"
                 />
-                {errors.address && <p className="text-red-500 text-sm">{errors.address.message}</p>}
+                {errors.address && (
+                  <p className="text-red-500 text-sm">
+                    {errors.address.message}
+                  </p>
+                )}
                 <input
                   type="text"
                   name="city"
@@ -145,7 +158,9 @@ export default function Checkout() {
                   placeholder="City"
                   className="w-full p-2 border rounded"
                 />
-                {errors.city && <p className="text-red-500 text-sm">{errors.city.message}</p>}
+                {errors.city && (
+                  <p className="text-red-500 text-sm">{errors.city.message}</p>
+                )}
                 <input
                   type="text"
                   name="state"
@@ -153,7 +168,9 @@ export default function Checkout() {
                   placeholder="State"
                   className="w-full p-2 border rounded"
                 />
-                {errors.state && <p className="text-red-500 text-sm">{errors.state.message}</p>}
+                {errors.state && (
+                  <p className="text-red-500 text-sm">{errors.state.message}</p>
+                )}
                 <input
                   type="text"
                   name="zip"
@@ -161,7 +178,9 @@ export default function Checkout() {
                   placeholder="ZIP Code"
                   className="w-full p-2 border rounded"
                 />
-                {errors.zip && <p className="text-red-500 text-sm">{errors.zip.message}</p>}
+                {errors.zip && (
+                  <p className="text-red-500 text-sm">{errors.zip.message}</p>
+                )}
                 <input
                   type="text"
                   name="country"
@@ -169,7 +188,11 @@ export default function Checkout() {
                   placeholder="Country"
                   className="w-full p-2 border rounded"
                 />
-                {errors.country && <p className="text-red-500 text-sm">{errors.country.message}</p>}
+                {errors.country && (
+                  <p className="text-red-500 text-sm">
+                    {errors.country.message}
+                  </p>
+                )}
               </div>
             </div>
             <div className="mb-6">
@@ -184,7 +207,11 @@ export default function Checkout() {
                   placeholder="Card Number"
                   className="w-full p-2 border rounded"
                 />
-                {errors.cardNumber && <p className="text-red-500 text-sm">{errors.cardNumber.message}</p>}
+                {errors.cardNumber && (
+                  <p className="text-red-500 text-sm">
+                    {errors.cardNumber.message}
+                  </p>
+                )}
                 <input
                   type="text"
                   name="expiryDate"
@@ -192,7 +219,11 @@ export default function Checkout() {
                   placeholder="Expiry Date (MM/YY)"
                   className="w-full p-2 border rounded"
                 />
-                {errors.expiryDate && <p className="text-red-500 text-sm">{errors.expiryDate.message}</p>}
+                {errors.expiryDate && (
+                  <p className="text-red-500 text-sm">
+                    {errors.expiryDate.message}
+                  </p>
+                )}
                 <input
                   type="text"
                   name="cvv"
@@ -200,7 +231,9 @@ export default function Checkout() {
                   placeholder="CVV"
                   className="w-full p-2 border rounded"
                 />
-                {errors.cvv && <p className="text-red-500 text-sm">{errors.cvv.message}</p>}
+                {errors.cvv && (
+                  <p className="text-red-500 text-sm">{errors.cvv.message}</p>
+                )}
               </div>
             </div>
             <div className="mb-6">
@@ -225,9 +258,11 @@ export default function Checkout() {
               </div>
             </div>
 
-<button
+            <button
               type="submit"
-              className={`w-full bg-[#464e6e] text-white px-6 py-3 rounded-lg hover:bg-[#353c57] mt-6 flex justify-center items-center text-lg font-medium ${isPlacingOrder ? "opacity-50" : ""}`}
+              className={`w-full bg-[#464e6e] text-white px-6 py-3 rounded-lg hover:bg-[#353c57] mt-6 flex justify-center items-center text-lg font-medium ${
+                isPlacingOrder ? "opacity-50" : ""
+              }`}
               disabled={isPlacingOrder}
             >
               {isPlacingOrder && (
@@ -261,4 +296,3 @@ export default function Checkout() {
     </>
   );
 }
-
