@@ -67,7 +67,7 @@ export default function Orders() {
                   {loading ? (
                     <tr>
                       <td colSpan="5" className="py-8 text-center h-60">
-                        <FaSpinner className="text-4xl text-gray-400 animate-spin inline-block align-middle" />
+                        <FaSpinner className="text-5xl text-gray-400 animate-spin inline-block align-middle" />
                       </td>
                     </tr>
                   ) : orders.length === 0 ? (

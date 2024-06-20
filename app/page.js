@@ -4,7 +4,7 @@ import axios from "axios";
 import ProductCard from "./components/ProductCard";
 import Navbar from "./components/Navbar";
 import Pagination from "./components/Pagination";
-import { FaSpinner, FaSearch } from "react-icons/fa"; // Importing the spinner from react-icons
+import { FaSpinner, FaSearch } from "react-icons/fa";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -71,7 +71,7 @@ export default function Products() {
       <div className="bg-gray-200 pt-6 pb-10">
         {isLoading ? (
           <div className="flex justify-center items-center h-screen">
-            <FaSpinner className="text-6xl animate-spin" />
+            <FaSpinner className="text-6xl animate-spin text-gray-400" />
           </div>
         ) : error ? (
           <div className="flex justify-center items-center h-screen">

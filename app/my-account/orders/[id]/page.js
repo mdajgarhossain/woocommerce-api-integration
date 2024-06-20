@@ -7,7 +7,7 @@ import { FaSpinner } from "react-icons/fa";
 
 export default function OrderDetails({ params }) {
   const [order, setOrder] = useState(null);
-  const [loading, setLoading] = useState(true); // State to manage loading status
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { id } = params;
 
@@ -15,15 +15,15 @@ export default function OrderDetails({ params }) {
     const fetchOrderDetails = async () => {
       if (!id) return;
       try {
-        setLoading(true); // Set loading to true when starting to fetch data
+        setLoading(true);
         const response = await axios.get(
           `http://localhost/ecommerce/wp-json/custom/v1/orders/${id}`
         );
         setOrder(response.data);
-        setLoading(false); // Set loading to false after data is fetched
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching order details:", error);
-        setLoading(false); // Ensure loading is set to false even in case of error
+        setLoading(false);
       }
     };
 
@@ -39,7 +39,7 @@ export default function OrderDetails({ params }) {
             <div className="p-6">
               <h2 className="text-2xl font-semibold mb-4">Order Details</h2>
               <div className="flex items-center justify-center h-60">
-                <FaSpinner className="text-4xl text-gray-400 animate-spin" />
+                <FaSpinner className="text-5xl text-gray-400 animate-spin" />
               </div>
             </div>
           </div>
