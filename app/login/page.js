@@ -35,10 +35,11 @@ export default function Login() {
             const response = await axios.post('http://localhost/ecommerce/wp-json/custom/v1/login', data);
             localStorage.setItem('user', JSON.stringify(response.data));
             toast.success('Login successful! Redirecting...', {
-                onClose: () => {
-                    router.push('/');
-                },
+                autoClose: 2000,
             });
+            setTimeout(() => {
+                router.push('/');
+            }, 1000);
             reset();
         } catch (err) {
             toast.error(err?.response?.data?.message || 'Invalid login credentials');

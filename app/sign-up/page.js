@@ -36,11 +36,12 @@ export default function SignUp() {
             const response = await axios.post('http://localhost/ecommerce/wp-json/custom/v1/register', data);
             localStorage.setItem('user', JSON.stringify(response.data));
             toast.success('Registration successful! Redirecting...', {
-                onClose: () => {
-                    router.push('/');
-                },
+                autoClose: 2000,
             });
-            reset(); // Reset the form immediately after showing the success message
+            setTimeout(() => {
+                router.push('/');
+            }, 1000);
+            reset(); 
         } catch (err) {
             console.log("err", err);
             toast.error(err?.response?.data?.message || 'Unknown error');

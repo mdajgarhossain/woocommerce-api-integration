@@ -100,11 +100,18 @@ export default function Checkout() {
       const response = await axios.post("/api/orders", orderData);
 
       localStorage.setItem("orderDetails", JSON.stringify(response.data));
-      toast.success("Order placed successfully! Redirecting...", {
-        onClose: () => {
-          router.push("/order-confirmation");
-        },
+      // toast.success("Order placed successfully! Redirecting...", {
+      //   onClose: () => {
+      //     router.push("/order-confirmation");
+      //   },
+      // });
+      toast.success('Order placed successfully! Redirecting...', {
+        autoClose: 2000,
       });
+      setTimeout(() => {
+        router.push("/order-confirmation");
+      }, 1000);
+      reset();
       localStorage.removeItem("cart"); // Clear the cart
     } catch (err) {
       toast.error("Failed to place order. Please try again.");
