@@ -138,6 +138,7 @@ import * as yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from '../components/Navbar';
+import Link from "next/link";
 
 // Validation schema
 const schema = yup.object().shape({
@@ -251,7 +252,7 @@ export default function SignUp() {
                         </button>
                     </form>
                     <p className="mt-6 text-center">
-                        Already have an account? <a href="/login" className="text-blue-500 hover:underline">Login</a>
+                        Already have an account? <Link href="/login" className="text-blue-500 hover:underline">Login</Link>
                     </p>
                     <ToastContainer />
                 </div>
