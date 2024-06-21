@@ -18,7 +18,7 @@ export default function OrderDetails({ params }) {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost/ecommerce/wp-json/custom/v1/orders/${id}`
+          `${process.env.NEXT_PUBLIC_WOOCOMMERCE_REST_API_BASE_URL}/wp-json/custom/v1/orders/${id}`
         );
         setOrder(response.data);
         setLoading(false);

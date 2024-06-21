@@ -18,8 +18,7 @@ export default function Orders() {
       if (storedUser) {
         const user = JSON.parse(storedUser);
         try {
-          const response = await axios.get(
-            "http://localhost/ecommerce/wp-json/custom/v1/orders",
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_WOOCOMMERCE_REST_API_BASE_URL}/wp-json/custom/v1/orders`,
             {
               params: { user_id: user.id },
             }

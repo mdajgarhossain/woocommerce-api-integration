@@ -152,7 +152,7 @@ export default function Login() {
         setIsLoggingIn(true);
 
         try {
-            const response = await axios.post('http://localhost/ecommerce/wp-json/custom/v1/login', data);
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_WOOCOMMERCE_REST_API_BASE_URL}/wp-json/custom/v1/login`, data);
             localStorage.setItem('user', JSON.stringify(response.data));
             toast.success('Login successful! Redirecting...', {
                 autoClose: 2000,
