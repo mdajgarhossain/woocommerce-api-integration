@@ -36,7 +36,7 @@ export default function Login() {
             localStorage.setItem('user', JSON.stringify(response.data));
             toast.success('Login successful! Redirecting...', {
                 onClose: () => {
-                    router.push('/checkout');
+                    router.push('/');
                 },
             });
             reset();

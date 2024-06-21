@@ -37,7 +37,7 @@ export default function SignUp() {
             localStorage.setItem('user', JSON.stringify(response.data));
             toast.success('Registration successful! Redirecting...', {
                 onClose: () => {
-                    router.push('/checkout');
+                    router.push('/');
                 },
             });
             reset(); // Reset the form immediately after showing the success message
