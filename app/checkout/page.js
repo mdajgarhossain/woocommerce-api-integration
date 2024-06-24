@@ -16,6 +16,7 @@ const schema = yup.object().shape({
   city: yup.string().required("City is required."),
   zip: yup.string().required("ZIP Code is required."),
   mobileNumber: yup.string().required("Mobile Number is required."),
+  paymentOption: yup.string().required("Payment option is required."),
 });
 
 export default function Checkout() {
@@ -61,16 +62,18 @@ export default function Checkout() {
 
     try {
       const orderData = {
-        payment_method: "cod",
-        payment_method_title: "Cash On Delivery",
+        payment_method: data.paymentOption === "cod" ? "cod" : "sslcommerz",
+        payment_method_title:
+          data.paymentOption === "cod" ? "Cash On Delivery" : "SSLCommerz",
         set_paid: false,
         billing: {
           first_name: data.fullName.split(" ")[0],
           last_name: data.fullName.split(" ")[1] || "",
           address_1: data.address,
           city: data.city,
+          state: "",
           postcode: data.zip,
-          country: "US", // Placeholder country
+          country: "Bangladesh",
           email: user.email,
           phone: data.mobileNumber,
         },
@@ -79,8 +82,9 @@ export default function Checkout() {
           last_name: data.fullName.split(" ")[1] || "",
           address_1: data.address,
           city: data.city,
+          state: "",
           postcode: data.zip,
-          country: "US", // Placeholder country
+          country: "Bangladesh",
         },
         line_items: cart.map((item) => ({
           product_id: item.id,
@@ -91,13 +95,19 @@ export default function Checkout() {
 
       const response = await axios.post("/api/orders", orderData);
 
-      localStorage.setItem("orderDetails", JSON.stringify(response.data));
-      toast.success('Order placed successfully! Redirecting...', {
-        autoClose: 2000,
-      });
-      setTimeout(() => {
-        router.push("/order-confirmation");
-      }, 1000);
+      if (data.paymentOption === "cod") {
+        localStorage.setItem("orderDetails", JSON.stringify(response.data));
+        toast.success('Order placed successfully! Redirecting...', {
+          autoClose: 2000,
+        });
+        setTimeout(() => {
+          router.push("/order-confirmation");
+        }, 1000);
+      } else {
+        // Redirect to SSLCommerz payment page
+        window.location.href = response.data.payment_url;
+      }
+
       reset();
       localStorage.removeItem("cart"); // Clear the cart
     } catch (err) {
@@ -135,16 +145,6 @@ export default function Checkout() {
                 )}
                 <input
                   type="text"
-                  name="mobileNumber"
-                  {...register("mobileNumber")}
-                  placeholder="Mobile Number"
-                  className="w-full p-2 border rounded"
-                />
-                {errors.mobileNumber && (
-                  <p className="text-red-500 text-sm">{errors.mobileNumber.message}</p>
-                )}
-                <input
-                  type="text"
                   name="address"
                   {...register("address")}
                   placeholder="Address"
@@ -175,25 +175,49 @@ export default function Checkout() {
                 {errors.zip && (
                   <p className="text-red-500 text-sm">{errors.zip.message}</p>
                 )}
-                
+                <input
+                  type="text"
+                  name="mobileNumber"
+                  {...register("mobileNumber")}
+                  placeholder="Mobile Number"
+                  className="w-full p-2 border rounded"
+                />
+                {errors.mobileNumber && (
+                  <p className="text-red-500 text-sm">
+                    {errors.mobileNumber.message}
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="mb-6">
-              <h3 className="text-2xl font-semibold mb-4">
-                Payment Options
-              </h3>
-              <div className="flex items-center">
-                <input
-                  type="radio"
-                  id="cod"
-                  name="paymentMethod"
-                  value="cod"
-                  checked
-                  readOnly
-                  className="mr-2"
-                />
-                <label htmlFor="cod" className="text-lg">Cash On Delivery</label>
+              <h3 className="text-2xl font-semibold mb-4">Payment Options</h3>
+              <div className="grid grid-cols-1 gap-4">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="paymentOption"
+                    value="cod"
+                    {...register("paymentOption")}
+                    className="mr-2"
+                  />
+                  Cash On Delivery
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="paymentOption"
+                    value="sslcommerz"
+                    {...register("paymentOption")}
+                    className="mr-2"
+                  />
+                  Pay Online (SSLCommerz)
+                </label>
+                {errors.paymentOption && (
+                  <p className="text-red-500 text-sm">
+                    {errors.paymentOption.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -257,3 +281,4 @@ export default function Checkout() {
     </>
   );
 }
+
