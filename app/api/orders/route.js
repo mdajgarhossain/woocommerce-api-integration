@@ -14,7 +14,7 @@ export async function POST(req) {
     try {
         const response = await api.post("orders", orderData);
 
-        if (orderData.payment_method === "sslcommerz") {
+        if (response.payment_method === "sslcommerz") {
             // Initiate SSLCommerz payment
             const sslcommerzResponse = await axios.post(
                 'https://sandbox.sslcommerz.com/gwprocess/v4/api.php', 
@@ -33,7 +33,11 @@ export async function POST(req) {
                     cus_phone: orderData.billing.phone,
                     shipping_method: "NO",
                     num_of_item: orderData.line_items.length,
-                    product_name: "Cart Items",
+                    product_name: "Computer",
+                    product_category: "clothing",
+                    cus_city: "Dhaka",
+                    cus_country: "BD",
+                    product_profile: 'general'
                 }
             );
 

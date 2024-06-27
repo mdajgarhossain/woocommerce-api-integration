@@ -73,7 +73,7 @@ export default function Checkout() {
           city: data.city,
           state: "",
           postcode: data.zip,
-          country: "Bangladesh",
+          country: "BD",
           email: user.email,
           phone: data.mobileNumber,
         },
@@ -84,7 +84,7 @@ export default function Checkout() {
           city: data.city,
           state: "",
           postcode: data.zip,
-          country: "Bangladesh",
+          country: "BD",
         },
         line_items: cart.map((item) => ({
           product_id: item.id,
