@@ -19,8 +19,8 @@ export async function POST(req) {
             const sslcommerzResponse = await axios.post(
                 'https://sandbox.sslcommerz.com/gwprocess/v4/api.php', 
                 {
-                    store_id: process.env.SSLCOMMERZ_STORE_ID,
-                    store_passwd: process.env.SSLCOMMERZ_STORE_PASSWORD,
+                    store_id: process.env.NEXT_PUBLIC_SSLCOMMERZ_STORE_ID,
+                    store_passwd: process.env.NEXT_PUBLIC_SSLCOMMERZ_STORE_PASSWORD,
                     total_amount: response.data.total,
                     currency: "BDT",
                     tran_id: response.data.id,
