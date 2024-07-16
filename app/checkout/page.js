@@ -26,6 +26,8 @@ export default function Checkout() {
 
   const router = useRouter();
 
+  console.log("process.env.NEXT_PUBLIC_BASE_URL", process.env.NEXT_PUBLIC_BASE_URL);
+
   const {
     register,
     handleSubmit,
@@ -73,7 +75,7 @@ export default function Checkout() {
           city: data.city,
           state: "",
           postcode: data.zip,
-          country: "Bangladesh",
+          country: "BD",
           email: user.email,
           phone: data.mobileNumber,
         },
@@ -84,7 +86,7 @@ export default function Checkout() {
           city: data.city,
           state: "",
           postcode: data.zip,
-          country: "Bangladesh",
+          country: "BD",
         },
         line_items: cart.map((item) => ({
           product_id: item.id,
@@ -94,10 +96,14 @@ export default function Checkout() {
       };
 
       const response = await axios.post("/api/orders", orderData);
+      console.log("response", response);
+      debugger;
+
+      // Store order details in localStorage
+      localStorage.setItem("orderDetails", JSON.stringify(response.data));
 
       if (data.paymentOption === "cod") {
-        localStorage.setItem("orderDetails", JSON.stringify(response.data));
-        toast.success('Order placed successfully! Redirecting...', {
+        toast.success("Order placed successfully! Redirecting...", {
           autoClose: 2000,
         });
         setTimeout(() => {
@@ -105,7 +111,50 @@ export default function Checkout() {
         }, 1000);
       } else {
         // Redirect to SSLCommerz payment page
-        window.location.href = response.data.payment_url;
+        const orderId = response.data.id;
+        const orderKey = response.data.order_key;
+        const amount = response.data.total;
+        const customerInfo = response.data.billing;
+
+        // Prepare SSLCommerz payment data
+        const paymentData = {
+          store_id: process.env.NEXT_PUBLIC_SSLCOMMERZ_STORE_ID,
+          store_passwd: process.env.NEXT_PUBLIC_SSLCOMMERZ_STORE_PASSWORD,
+          total_amount: amount,
+          currency: "BDT",
+          tran_id: orderId,
+          success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment-success/${orderId}`,
+          fail_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment-failure/${orderId}`,
+          cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment-cancel/${orderId}`,
+          cus_name: customerInfo.first_name + " " + customerInfo.last_name,
+          cus_email: customerInfo.email,
+          cus_add1: customerInfo.address_1,
+          cus_add2: customerInfo.address_2,
+          cus_city: customerInfo.city,
+          cus_state: customerInfo.state,
+          cus_postcode: customerInfo.postcode,
+          cus_country: customerInfo.country,
+          cus_phone: customerInfo.phone,
+          shipping_method: "NO",
+          product_name: "Order " + orderId,
+          product_category: "General",
+          product_profile: "general",
+        };
+
+        const sslCommerzResponse = await axios.post(
+          "/api/sslcommerz",
+          paymentData
+        );
+
+        if (sslCommerzResponse.data.status === "SUCCESS") {
+          const gatewayUrl = sslCommerzResponse.data.GatewayPageURL;
+          window.location.href = gatewayUrl;
+        } else {
+          console.error(
+            "Payment initialization failed: ",
+            sslCommerzResponse.data
+          );
+        }
       }
 
       reset();
@@ -221,64 +270,23 @@ export default function Checkout() {
               </div>
             </div>
 
-            <div className="mb-6">
-              <h3 className="text-2xl font-semibold mb-4">Order Summary</h3>
-              <div className="border p-4 rounded-lg">
-                {cart.map((item) => (
-                  <div key={item.id} className="flex justify-between mb-2">
-                    <p>
-                      {item.name} x {item.quantity}
-                    </p>
-                    <p>${(item.price * item.quantity).toFixed(2)}</p>
-                  </div>
-                ))}
-                <div className="flex justify-between font-semibold">
-                  <p>Shipping</p>
-                  <p>$10.00</p>
-                </div>
-                <div className="flex justify-between font-bold mt-2">
-                  <p>Grand Total</p>
-                  <p>${(parseFloat(calculateTotal()) + 10.0).toFixed(2)}</p>
-                </div>
-              </div>
+            <div className="text-center mt-8">
+              <button
+                type="submit"
+                className={`${
+                  isPlacingOrder
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-blue-500 hover:bg-blue-700"
+                } text-white font-bold py-2 px-4 rounded`}
+                disabled={isPlacingOrder}
+              >
+                {isPlacingOrder ? "Placing Order..." : "Place Order"}
+              </button>
             </div>
-
-            <button
-              type="submit"
-              className={`w-full bg-[#464e6e] text-white px-6 py-3 rounded-lg hover:bg-[#353c57] mt-6 flex justify-center items-center text-lg font-medium ${
-                isPlacingOrder ? "opacity-50" : ""
-              }`}
-              disabled={isPlacingOrder}
-            >
-              {isPlacingOrder && (
-                <svg
-                  className="animate-spin h-5 w-5 mr-3 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.963 7.963 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-              )}
-              {isPlacingOrder ? "Placing Order..." : "Place Order"}
-            </button>
           </form>
         </div>
+        <ToastContainer />
       </div>
-      <ToastContainer />
     </>
   );
 }
-

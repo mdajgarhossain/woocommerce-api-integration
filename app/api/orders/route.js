@@ -3,8 +3,8 @@ import axios from "axios";
 
 const api = new WooCommerceRestApi({
     url: process.env.NEXT_PUBLIC_WOOCOMMERCE_REST_API_BASE_URL,
-    consumerKey: process.env.WOOCOMMERCE_CONSUMER_KEY,
-    consumerSecret: process.env.WOOCOMMERCE_CONSUMER_SECRET,
+    consumerKey: process.env.NEXT_PUBLIC_WOOCOMMERCE_CONSUMER_KEY,
+    consumerSecret: process.env.NEXT_PUBLIC_WOOCOMMERCE_CONSUMER_SECRET,
     version: "wc/v3",
 });
 
@@ -14,13 +14,13 @@ export async function POST(req) {
     try {
         const response = await api.post("orders", orderData);
 
-        if (orderData.payment_method === "sslcommerz") {
+        if (response.payment_method === "sslcommerz") {
             // Initiate SSLCommerz payment
             const sslcommerzResponse = await axios.post(
                 'https://sandbox.sslcommerz.com/gwprocess/v4/api.php', 
                 {
-                    store_id: process.env.SSLCOMMERZ_STORE_ID,
-                    store_passwd: process.env.SSLCOMMERZ_STORE_PASSWORD,
+                    store_id: process.env.NEXT_PUBLIC_SSLCOMMERZ_STORE_ID,
+                    store_passwd: process.env.NEXT_PUBLIC_SSLCOMMERZ_STORE_PASSWORD,
                     total_amount: response.data.total,
                     currency: "BDT",
                     tran_id: response.data.id,
@@ -33,7 +33,11 @@ export async function POST(req) {
                     cus_phone: orderData.billing.phone,
                     shipping_method: "NO",
                     num_of_item: orderData.line_items.length,
-                    product_name: "Cart Items",
+                    product_name: "Computer",
+                    product_category: "clothing",
+                    cus_city: "Dhaka",
+                    cus_country: "BD",
+                    product_profile: 'general'
                 }
             );
 
