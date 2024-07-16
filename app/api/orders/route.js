@@ -3,8 +3,8 @@ import axios from "axios";
 
 const api = new WooCommerceRestApi({
     url: process.env.NEXT_PUBLIC_WOOCOMMERCE_REST_API_BASE_URL,
-    consumerKey: process.env.WOOCOMMERCE_CONSUMER_KEY,
-    consumerSecret: process.env.WOOCOMMERCE_CONSUMER_SECRET,
+    consumerKey: process.env.NEXT_PUBLIC_WOOCOMMERCE_CONSUMER_KEY,
+    consumerSecret: process.env.NEXT_PUBLIC_WOOCOMMERCE_CONSUMER_SECRET,
     version: "wc/v3",
 });
 
